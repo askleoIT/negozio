@@ -975,8 +975,8 @@ footer span{color:var(--gold)}
 </div>
 
 <!-- ═══ ADMIN PANEL ═══ -->
-<div class="admin-overlay open" id="admin-overlay" onclick="toggleAdmin()"></div>
-<div class="admin-panel open" id="admin-panel">
+<div class="admin-overlay" id="admin-overlay" onclick="toggleAdmin()"></div>
+<div class="admin-panel" id="admin-panel">
   <div class="admin-header">
     <h2>⚙ Gestione Catalogo</h2>
     <button class="close-btn" onclick="toggleAdmin()">✕</button>
@@ -1607,6 +1607,12 @@ function renderAdminList(){
 
 function downloadSito(){
   try{
+    // Chiude tutti i pannelli aperti prima di catturare il DOM
+    ['admin-panel','admin-overlay','burger-drawer','burger-overlay','cart-panel','cart-overlay']
+      .forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('open'); });
+    const burgerBtn=document.getElementById('burger-btn');
+    if(burgerBtn) burgerBtn.classList.remove('open');
+
     // Prende l'HTML completo della pagina
     let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
