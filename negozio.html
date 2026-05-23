@@ -296,9 +296,16 @@ header{
 .card-img{
   width:100%;aspect-ratio:1/1;overflow:hidden;
   background:var(--perga2);display:flex;align-items:center;justify-content:center;
-  font-size:clamp(36px,10vw,56px);
+  font-size:clamp(36px,10vw,56px);position:relative;
 }
-.card-img img{width:100%;height:100%;object-fit:cover}
+.card-img img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;
+  display:none;
+}
+.card-img.img-ok img{display:block}
+.card-img.img-ok .card-emoji-fb{display:none}
+.card-emoji-fb{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
 .card-body{padding:10px 10px 12px;flex:1;display:flex;flex-direction:column}
 .card-cat{font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-d);margin-bottom:2px}
 .card-name{font-size:clamp(13px,3vw,15px);font-weight:bold;color:var(--navy);margin-bottom:2px;line-height:1.25}
@@ -441,9 +448,14 @@ header{
   width:52px;height:52px;border-radius:10px;overflow:hidden;
   background:var(--perga2);flex-shrink:0;
   display:flex;align-items:center;justify-content:center;font-size:26px;
-  border:1px solid var(--perga3);
+  border:1px solid var(--perga3);position:relative;
 }
-.ci-img img{width:100%;height:100%;object-fit:cover}
+.ci-img img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;display:none;
+}
+.ci-img.img-ok img{display:block}
+.ci-img.img-ok .card-emoji-fb{display:none}
 .ci-info{flex:1;min-width:0}
 .ci-name{font-size:14px;font-weight:bold;color:var(--navy);line-height:1.2;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -865,6 +877,18 @@ footer span{color:var(--gold)}
       </div>
     </div>
 
+    <!-- Salva sito -->
+    <div class="admin-form" style="background:rgba(35,134,54,.08);border-color:rgba(35,134,54,.3)">
+      <h3 style="color:#1a5c2a">💾 Salva le modifiche nel sito</h3>
+      <p style="font-size:13px;color:var(--testo-l);margin-bottom:12px;line-height:1.5">
+        I prodotti che hai aggiunto o modificato vengono salvati <em>solo su questo browser</em>.<br>
+        Clicca il pulsante per scaricare il sito aggiornato con tutti i tuoi prodotti incorporati, poi caricalo su GitHub.
+      </p>
+      <button class="add-product-btn" onclick="downloadSito()" style="background:#238636;width:100%;font-size:15px">
+        ⬇️ Scarica sito aggiornato (index.html)
+      </button>
+    </div>
+
     <!-- Lista prodotti -->
     <div class="admin-list">
       <h3>📋 Prodotti nel catalogo</h3>
@@ -979,8 +1003,8 @@ function renderCatalogo(){
     items.forEach(p=>{
       if(!localQty[p.id]) localQty[p.id]=1;
       const imgHtml=p.img
-        ?`<div class="card-img"><img src="${p.img}" alt="${p.nome}" onerror="this.parentNode.innerHTML='<span>${p.emoji||'📦'}</span>'"></div>`
-        :`<div class="card-img">${p.emoji||'📦'}</div>`;
+        ?`<div class="card-img" id="cimg-${p.id}"><img src="${p.img}" alt="${p.nome}" onload="document.getElementById('cimg-${p.id}').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">${p.emoji||'📦'}</span></div>`
+        :`<div class="card-img"><span class="card-emoji-fb">${p.emoji||'📦'}</span></div>`;
       const card=document.createElement("div");
       card.className="card";card.id="card-"+p.id;
       card.innerHTML=`
@@ -1044,7 +1068,7 @@ function updateCartUI(){
   items.innerHTML=entries.map(([id,qty])=>{
     const p=findP(id);if(!p) return "";
     const imgHtml=p.img
-      ?`<div class="ci-img"><img src="${p.img}" alt="" onerror="this.parentNode.innerHTML='<span>${p.emoji||'📦'}</span>'"></div>`
+      ?`<div class="ci-img" id="ciimg-${id}"><img src="${p.img}" alt="" onload="document.getElementById('ciimg-${id}').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">${p.emoji||'📦'}</span></div>`
       :`<div class="ci-img">${p.emoji||'📦'}</div>`;
     return `<div class="cart-item">
       ${imgHtml}
@@ -1124,7 +1148,7 @@ function submitForm(){
   const prez=parseFloat(document.getElementById("f-prezzo").value);
   const unita=document.getElementById("f-unita").value.trim()||"cad";
   const desc=document.getElementById("f-desc").value.trim();
-  const img=document.getElementById("f-img").value.trim();
+  const img=document.getElementById("f-img").value.trim().replace(/^['"]|['"]$/g,'');
   const emoji=document.getElementById("f-emoji").value.trim()||"📦";
   if(!nome||isNaN(prez)){showToast("Inserisci almeno nome e prezzo");return;}
   if(editingId){
@@ -1198,6 +1222,45 @@ function renderAdminList(){
       </div>`;
     }).join("");
   }).join("");
+}
+
+function downloadSito(){
+  try{
+    // Prende l'HTML completo della pagina
+    let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+    // Sostituisce PRODOTTI_DEFAULT con la lista attuale
+    const nuoviProdotti = JSON.stringify(prodotti, null, 2);
+    html = html.replace(
+      /const PRODOTTI_DEFAULT\s*=\s*\[[\s\S]*?\];/,
+      'const PRODOTTI_DEFAULT = ' + nuoviProdotti + ';'
+    );
+
+    // Aggiorna il numero WhatsApp nel codice
+    html = html.replace(
+      /const ADMIN_PASSWORD\s*=\s*"[^"]*";/,
+      'const ADMIN_PASSWORD = "' + ADMIN_PASSWORD + '";'
+    );
+
+    // Aggiorna il numero WA salvato
+    html = html.replace(
+      /function loadWa\(\)\{return localStorage\.getItem\("ibds_wa"\)\|\|"[^"]*";\}/,
+      'function loadWa(){return localStorage.getItem("ibds_wa")||"' + waNumber + '";}'
+    );
+
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'index.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    showToast('Sito scaricato ✓ Caricalo su GitHub!');
+  } catch(e){
+    showToast('Errore nel download — riprova');
+    console.error(e);
+  }
 }
 
 function fmt(n){return "€ "+n.toFixed(2).replace(".",",");}
