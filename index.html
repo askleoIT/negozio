@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f1e3a">
+<title>Il Buono dal Sud — Nicola</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --navy:   #0f1e3a;
+  --navy2:  #1a2f55;
+  --gold:   #c9a227;
+  --gold-l: #e2c05a;
+  --gold-d: #9b7a18;
+  --perga:  #f5e6c5;
+  --perga2: #ede0b5;
+  --perga3: #dfd09a;
+  --testo:  #1a1408;
+  --testo-l:#6b5a30;
+  --rosso:  #7a1a1a;
+  --bianco: #fff;
+  --r: 14px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ═══ BASE (mobile-first) ═══ */
+html{scroll-behavior:smooth}
+body{
+  font-family:'Georgia',serif;
+  background:var(--perga);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  color:var(--testo);
+  min-height:100vh;
+  /* spazio per FAB cart in basso */
+  padding-bottom:calc(80px + var(--safe-bottom));
+}
+
+/* ═══ HEADER ═══ */
+header{
+  background:var(--navy);
+  border-bottom:2.5px solid var(--gold);
+  padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:60px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,.4);
+}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.header-logo{
+  height:46px;width:46px;border-radius:50%;
+  border:2px solid var(--gold);object-fit:cover;flex-shrink:0;
+}
+.logo-testi{min-width:0}
+.logo-nome{
+  font-size:15px;color:var(--gold);font-weight:bold;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.logo-sub{font-size:10px;color:rgba(255,255,255,.5);font-style:italic;display:none}
+
+/* burger button */
+.burger-btn{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;justify-content:center;
+  gap:5px;padding:8px;margin-left:4px;
+  width:44px;height:44px;flex-shrink:0;
+}
+.burger-btn span{
+  display:block;height:2px;border-radius:2px;
+  background:var(--gold);transition:.3s;transform-origin:center;
+}
+.burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ═══ BURGER MENU DRAWER ═══ */
+.burger-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:150;opacity:0;pointer-events:none;transition:.3s;
+}
+.burger-overlay.open{opacity:1;pointer-events:auto}
+
+.burger-drawer{
+  position:fixed;top:0;left:0;bottom:0;
+  width:min(300px, 85vw);
+  background:var(--navy);
+  z-index:151;
+  display:flex;flex-direction:column;
+  transform:translateX(-100%);
+  transition:.35s cubic-bezier(.33,1,.68,1);
+  overflow:hidden;
+}
+.burger-drawer.open{transform:translateX(0)}
+
+/* drawer top — logo */
+.bd-top{
+  padding:20px 20px 16px;
+  border-bottom:1px solid rgba(201,162,39,.25);
+  display:flex;align-items:center;gap:12px;
+}
+.bd-logo{
+  width:54px;height:54px;border-radius:50%;
+  border:2px solid var(--gold);object-fit:cover;flex-shrink:0;
+}
+.bd-logo-fallback{
+  width:54px;height:54px;border-radius:50%;
+  border:2px solid var(--gold);background:var(--navy2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
+.bd-brand{flex:1;min-width:0}
+.bd-nome{font-size:15px;color:var(--gold);font-weight:bold}
+.bd-sub{font-size:10px;color:rgba(255,255,255,.5);font-style:italic;margin-top:2px}
+
+/* drawer nav */
+.bd-nav{flex:1;overflow-y:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.bd-section-label{
+  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);padding:14px 20px 6px;
+}
+.bd-item{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 20px;color:rgba(255,255,255,.8);
+  font-size:15px;cursor:pointer;transition:.2s;
+  border:none;background:none;font-family:inherit;
+  width:100%;text-align:left;
+  border-left:3px solid transparent;
+}
+.bd-item:active,.bd-item.active{
+  background:rgba(201,162,39,.12);
+  color:var(--gold);
+  border-left-color:var(--gold);
+}
+.bd-item-icon{font-size:20px;width:26px;text-align:center;flex-shrink:0}
+.bd-divider{height:1px;background:rgba(255,255,255,.1);margin:8px 20px}
+
+/* drawer bottom */
+.bd-bottom{
+  padding:14px 20px calc(14px + var(--safe-bottom));
+  border-top:1px solid rgba(201,162,39,.2);
+}
+.bd-admin-btn{
+  display:flex;align-items:center;gap:10px;
+  width:100%;padding:13px 16px;
+  background:rgba(201,162,39,.1);
+  border:1px solid rgba(201,162,39,.3);
+  border-radius:12px;
+  color:var(--gold);font-size:14px;font-weight:bold;
+  cursor:pointer;font-family:inherit;transition:.2s;
+}
+.bd-admin-btn:active{background:rgba(201,162,39,.2)}
+
+/* ═══ HERO ═══ */
+.hero{
+  background:var(--navy);
+  padding:32px 16px 28px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(201,162,39,.1) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;inset:8px;
+  border:1px solid rgba(201,162,39,.2);pointer-events:none;
+}
+.hero-seal{position:relative;z-index:1;margin:0 auto 16px}
+.hero-seal img{
+  width:min(380px, 85vw);
+  height:min(380px, 85vw);
+  border-radius:50%;
+  border:4px solid var(--gold);
+  object-fit:cover;
+  display:block;margin:0 auto;
+  box-shadow:0 0 0 2px var(--navy),
+             0 0 0 8px rgba(201,162,39,.25),
+             0 12px 40px rgba(0,0,0,.6);
+}
+.hero-seal-fallback{
+  width:min(380px,85vw);height:min(380px,85vw);
+  border-radius:50%;border:4px solid var(--gold);
+  background:var(--navy2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(60px,20vw,150px);
+  box-shadow:0 0 0 2px var(--navy),0 0 0 8px rgba(201,162,39,.25),0 12px 40px rgba(0,0,0,.6);
+  margin:0 auto;
+}
+.hero-nicola{
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:10px;
+}
+.hero-nicola::before,.hero-nicola::after{content:'';width:30px;height:1px;background:var(--gold-d)}
+.hero-nicola-text{color:var(--gold-l);font-size:13px;letter-spacing:2px;font-style:italic}
+.hero-banner{
+  position:relative;z-index:1;
+  background:var(--navy2);
+  border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);
+  padding:10px 20px;display:inline-block;margin-bottom:12px;
+  max-width:100%;
+}
+.hero-banner h1{
+  font-size:clamp(17px,4.5vw,28px);
+  color:var(--bianco);letter-spacing:.5px;
+  line-height:1.3;
+}
+.hero-banner h1 span{color:var(--gold)}
+.hero-sub{
+  position:relative;z-index:1;
+  color:rgba(255,255,255,.65);font-size:14px;
+  font-style:italic;max-width:380px;margin:0 auto 16px;
+  line-height:1.5;
+}
+.hero-tags{
+  display:flex;justify-content:center;gap:6px;flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+.htag{
+  background:rgba(201,162,39,.12);
+  border:1px solid rgba(201,162,39,.3);
+  border-radius:50px;padding:5px 11px;
+  font-size:11px;color:var(--gold-l);
+}
+
+/* ═══ FILTRI CATEGORIA ═══ */
+.cat-filters{
+  display:flex;gap:8px;overflow-x:auto;
+  padding:14px 16px 0;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.cat-filters::-webkit-scrollbar{display:none}
+.cat-pill{
+  background:var(--bianco);border:1.5px solid var(--perga3);
+  border-radius:50px;padding:8px 14px;
+  font-size:13px;font-family:inherit;color:var(--testo-l);
+  cursor:pointer;white-space:nowrap;transition:.2s;flex-shrink:0;
+  -webkit-appearance:none;
+}
+.cat-pill.active,.cat-pill:active{
+  background:var(--navy);color:var(--gold);border-color:var(--navy);
+}
+
+/* ═══ CONTAINER ═══ */
+.container{padding:16px 12px 0;max-width:1140px;margin:0 auto}
+
+/* ═══ SECTION TITLE ═══ */
+.section-head{text-align:center;margin:24px 0 14px}
+.divider{display:flex;align-items:center;gap:10px;margin:4px 0 16px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent)}
+.divider-icon{color:var(--gold);font-size:14px;flex-shrink:0}
+.section-title-text{
+  display:inline-block;font-size:18px;color:var(--navy);
+  letter-spacing:.4px;padding:0 12px;
+}
+.section-title-text::before,.section-title-text::after{content:'✦';color:var(--gold);margin:0 6px;font-size:12px}
+
+/* ═══ GRIGLIA PRODOTTI ═══ */
+/* mobile: 2 colonne compatte */
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:10px;
+  margin-bottom:8px;
+}
+/* tablet: 3 colonne */
+@media(min-width:600px){
+  .products-grid{grid-template-columns:repeat(3,1fr);gap:14px}
+}
+/* desktop: 4 colonne */
+@media(min-width:960px){
+  .products-grid{grid-template-columns:repeat(4,1fr);gap:18px}
+}
+
+/* ═══ CARD ═══ */
+.card{
+  background:var(--bianco);
+  border-radius:var(--r);
+  border:1px solid var(--perga3);
+  box-shadow:0 3px 12px rgba(0,0,0,.1);
+  overflow:hidden;display:flex;flex-direction:column;
+  position:relative;transition:.2s;
+  /* prevent text selection on fast tap */
+  -webkit-user-select:none;user-select:none;
+}
+.card:active{transform:scale(.98);box-shadow:0 1px 6px rgba(0,0,0,.1)}
+@media(hover:hover){
+  .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.16)}
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--navy),var(--gold),var(--navy));
+}
+.card-img{
+  width:100%;aspect-ratio:1/1;overflow:hidden;
+  background:var(--perga2);display:flex;align-items:center;justify-content:center;
+  font-size:clamp(36px,10vw,56px);position:relative;
+}
+.card-img img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;
+  display:none;
+}
+.card-img.img-ok img{display:block}
+.card-img.img-ok .card-emoji-fb{display:none}
+.card-emoji-fb{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.card-body{padding:10px 10px 12px;flex:1;display:flex;flex-direction:column}
+.card-cat{font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-d);margin-bottom:2px}
+.card-name{font-size:clamp(13px,3vw,15px);font-weight:bold;color:var(--navy);margin-bottom:2px;line-height:1.25}
+.card-desc{font-size:11px;color:var(--testo-l);font-style:italic;flex:1;margin-bottom:8px;line-height:1.4;display:none}
+.card-price{font-size:clamp(16px,4vw,19px);color:var(--rosso);font-weight:bold;margin-bottom:10px}
+.card-price span{font-size:10px;color:var(--testo-l);font-weight:normal}
+
+/* show desc on larger screens */
+@media(min-width:480px){.card-desc{display:block}}
+
+.qty-row{display:flex;align-items:center;gap:6px}
+.qty-btn{
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid var(--navy);background:transparent;
+  color:var(--navy);font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:.15s;font-family:inherit;flex-shrink:0;
+}
+.qty-btn:active{background:var(--navy);color:white;transform:scale(.9)}
+.qty-val{font-size:15px;font-weight:bold;min-width:22px;text-align:center}
+.add-btn{
+  flex:1;background:var(--navy);
+  color:var(--gold);border:none;border-radius:10px;
+  padding:0 8px;height:36px;font-size:12px;font-weight:bold;
+  cursor:pointer;transition:.2s;font-family:inherit;
+  white-space:nowrap;
+}
+.add-btn:active{background:var(--navy2);transform:scale(.97)}
+.add-btn.added{background:var(--gold);color:var(--navy)}
+
+/* ═══ FAB CARRELLO (mobile) ═══ */
+.cart-fab{
+  position:fixed;bottom:calc(16px + var(--safe-bottom));left:50%;
+  transform:translateX(-50%);
+  background:var(--gold);color:var(--navy);
+  border:none;border-radius:50px;
+  padding:0 24px;height:56px;
+  display:flex;align-items:center;gap:10px;
+  font-size:16px;font-weight:bold;font-family:inherit;
+  cursor:pointer;z-index:90;
+  box-shadow:0 6px 20px rgba(0,0,0,.3), 0 0 0 3px rgba(201,162,39,.25);
+  transition:.2s;
+  white-space:nowrap;
+  min-width:180px;justify-content:center;
+}
+.cart-fab:active{transform:translateX(-50%) scale(.96)}
+.cart-fab-count{
+  background:var(--navy);color:var(--gold);
+  border-radius:50%;width:26px;height:26px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:bold;flex-shrink:0;
+}
+/* desktop: nasconde FAB, mostra bottone header */
+.cart-header-btn{display:none}
+@media(min-width:768px){
+  .cart-fab{display:none}
+  .cart-header-btn{
+    display:flex;align-items:center;gap:8px;
+    background:var(--gold);border:none;border-radius:50px;
+    color:var(--navy);cursor:pointer;padding:10px 20px;
+    font-size:14px;font-weight:bold;font-family:inherit;transition:.2s;
+  }
+  .cart-header-btn:hover{background:var(--gold-l)}
+  #cart-count-h{
+    background:var(--navy);color:var(--gold);
+    border-radius:50%;width:22px;height:22px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:bold;
+  }
+  body{padding-bottom:0}
+  .logo-sub{display:block}
+  header{height:72px;padding:0 24px}
+  .header-logo{height:58px;width:58px}
+  .logo-nome{font-size:18px}
+}
+
+/* ═══ CART PANEL ═══ */
+.cart-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:200;opacity:0;pointer-events:none;transition:.3s;
+}
+.cart-overlay.open{opacity:1;pointer-events:auto}
+
+/* mobile: slide dal basso */
+.cart-panel{
+  position:fixed;
+  left:0;right:0;bottom:0;
+  height:92dvh;
+  background:var(--perga);
+  z-index:201;
+  display:flex;flex-direction:column;
+  border-radius:20px 20px 0 0;
+  transform:translateY(100%);
+  transition:.35s cubic-bezier(.32,0,.67,0);
+  box-shadow:0 -8px 40px rgba(0,0,0,.3);
+}
+.cart-panel.open{transform:translateY(0);transition-timing-function:cubic-bezier(.33,1,.68,1)}
+
+/* desktop: slide da destra */
+@media(min-width:768px){
+  .cart-panel{
+    left:auto;right:0;top:0;bottom:auto;
+    width:min(440px,100vw);height:100vh;
+    border-radius:0;
+    transform:translateX(100%);
+  }
+  .cart-panel.open{transform:translateX(0)}
+}
+
+/* maniglia mobile */
+.cart-handle{
+  width:40px;height:4px;border-radius:2px;
+  background:rgba(0,0,0,.2);margin:10px auto 0;flex-shrink:0;
+}
+@media(min-width:768px){.cart-handle{display:none}}
+
+.cart-header{
+  background:var(--navy);color:white;
+  padding:14px 20px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:2.5px solid var(--gold);
+  flex-shrink:0;
+}
+.cart-header h2{font-size:17px;color:var(--gold)}
+.close-btn{
+  background:none;border:none;color:rgba(255,255,255,.7);
+  font-size:26px;cursor:pointer;line-height:1;
+  padding:4px 8px;
+}
+.cart-items{flex:1;overflow-y:auto;padding:12px 16px;-webkit-overflow-scrolling:touch}
+.cart-empty{
+  text-align:center;color:var(--testo-l);
+  padding:50px 20px;font-style:italic;font-size:15px;line-height:1.6;
+}
+.cart-item{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 0;border-bottom:1px solid var(--perga3);
+}
+.ci-img{
+  width:52px;height:52px;border-radius:10px;overflow:hidden;
+  background:var(--perga2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  border:1px solid var(--perga3);position:relative;
+}
+.ci-img img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;display:none;
+}
+.ci-img.img-ok img{display:block}
+.ci-img.img-ok .card-emoji-fb{display:none}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:14px;font-weight:bold;color:var(--navy);line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-unit{font-size:11px;color:var(--testo-l)}
+.ci-qty-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.ci-qb{
+  width:32px;height:32px;border-radius:50%;
+  border:1.5px solid var(--navy);background:none;
+  color:var(--navy);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;flex-shrink:0;
+}
+.ci-qb:active{background:var(--navy);color:white}
+.ci-qv{font-size:15px;font-weight:bold;min-width:20px;text-align:center}
+.ci-tot{font-size:15px;font-weight:bold;color:var(--rosso);min-width:56px;text-align:right;flex-shrink:0}
+
+.cart-footer{
+  padding:14px 16px calc(14px + var(--safe-bottom));
+  border-top:2px solid var(--perga3);
+  background:var(--perga2);flex-shrink:0;
+}
+.cart-totale{
+  display:flex;justify-content:space-between;
+  font-size:18px;font-weight:bold;
+  margin-bottom:14px;padding-bottom:12px;
+  border-bottom:1px solid var(--perga3);
+}
+.cart-totale span:last-child{color:var(--rosso)}
+
+/* campi cliente */
+.client-label{
+  font-size:11px;font-weight:bold;letter-spacing:.8px;
+  color:var(--testo-l);text-transform:uppercase;
+  margin-bottom:6px;display:block;
+}
+.client-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.client-input{
+  width:100%;border:1.5px solid var(--perga3);
+  border-radius:10px;padding:12px;
+  font-family:'Georgia',serif;font-size:16px; /* 16px evita zoom su iOS */
+  background:var(--bianco);color:var(--testo);
+}
+.client-input:focus{outline:none;border-color:var(--gold-d)}
+.client-input::placeholder{color:#bbb;font-style:italic}
+
+.note-field{
+  width:100%;border:1.5px solid var(--perga3);
+  border-radius:10px;padding:12px;
+  font-family:'Georgia',serif;font-size:16px;
+  resize:none;margin-bottom:12px;background:var(--bianco);
+}
+.note-field:focus{outline:none;border-color:var(--gold-d)}
+.note-field::placeholder{color:#bbb;font-style:italic}
+
+.wa-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;background:#25d366;color:white;
+  border:none;border-radius:14px;
+  padding:16px;font-size:17px;font-weight:bold;
+  cursor:pointer;transition:.2s;font-family:inherit;
+  box-shadow:0 4px 16px rgba(37,211,102,.35);
+  min-height:56px;
+}
+.wa-btn:active{background:#1aad55;transform:scale(.98)}
+.wa-btn svg{width:24px;height:24px;fill:white;flex-shrink:0}
+
+/* ═══ ADMIN ═══ */
+.admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;opacity:0;pointer-events:none;transition:.25s}
+.admin-overlay.open{opacity:1;pointer-events:auto}
+/* mobile: full screen dal basso */
+.admin-panel{
+  position:fixed;
+  left:0;right:0;bottom:0;top:60px;
+  background:var(--perga);z-index:301;
+  display:flex;flex-direction:column;
+  transform:translateY(100%);transition:.35s ease;
+  box-shadow:0 -4px 30px rgba(0,0,0,.3);
+}
+.admin-panel.open{transform:translateY(0)}
+/* desktop: pannello centrale */
+@media(min-width:768px){
+  .admin-panel{
+    top:0;left:50%;right:auto;bottom:auto;
+    width:min(720px,100vw);height:90vh;
+    border-radius:0 0 var(--r) var(--r);
+    transform:translate(-50%,-100%);
+  }
+  .admin-panel.open{transform:translate(-50%,0)}
+}
+.admin-header{
+  background:var(--navy);color:white;padding:14px 18px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:2.5px solid var(--gold);flex-shrink:0;
+}
+.admin-header h2{font-size:16px;color:var(--gold)}
+.admin-body{overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch;flex:1}
+.admin-form{
+  background:var(--perga2);border:1px solid var(--perga3);
+  border-radius:var(--r);padding:14px;margin-bottom:16px;
+}
+.admin-form h3{font-size:14px;margin-bottom:12px;color:var(--navy)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.form-row.full{grid-template-columns:1fr}
+@media(max-width:480px){.form-row{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;color:var(--testo-l);font-weight:bold;letter-spacing:.4px;text-transform:uppercase}
+.field input,.field select{
+  border:1.5px solid var(--perga3);border-radius:8px;
+  padding:11px 10px;font-family:'Georgia',serif;font-size:16px;
+  background:white;color:var(--testo);-webkit-appearance:none;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--navy)}
+.add-product-btn{
+  background:var(--navy);color:var(--gold);border:none;
+  border-radius:10px;padding:12px 18px;font-size:14px;
+  font-weight:bold;cursor:pointer;font-family:inherit;
+  margin-top:6px;transition:.2s;min-height:48px;
+}
+.add-product-btn:active{background:var(--navy2)}
+.admin-list h3{font-size:14px;color:var(--navy);margin-bottom:10px}
+.admin-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;background:var(--perga2);
+  border-radius:10px;margin-bottom:8px;
+  border:1px solid var(--perga3);
+}
+.ai-img{
+  width:44px;height:44px;border-radius:8px;
+  object-fit:cover;background:var(--perga3);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  flex-shrink:0;overflow:hidden;border:1px solid var(--perga3);
+}
+.ai-img img{width:100%;height:100%;object-fit:cover}
+.ai-info{flex:1;min-width:0}
+.ai-name{font-size:13px;font-weight:bold;color:var(--navy);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ai-meta{font-size:11px;color:var(--testo-l)}
+.ai-actions{display:flex;gap:4px;flex-shrink:0}
+.ai-edit,.ai-del,.ai-toggle{
+  border-radius:8px;padding:0;cursor:pointer;
+  font-size:18px;font-family:inherit;transition:.2s;
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  background:none;border:1.5px solid var(--perga3);
+}
+.ai-toggle{border-color:var(--perga3);color:var(--testo-l);font-size:16px}
+.ai-toggle.off{opacity:.5}
+.ai-edit{border-color:var(--navy2);color:var(--navy)}
+.ai-del{border-color:#c44;color:#c44}
+.ai-edit:active{background:var(--navy);color:var(--gold);border-color:var(--navy)}
+.ai-del:active{background:#c44;color:white}
+.ai-toggle:active{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+
+/* ═══ PASSWORD MODAL ═══ */
+.pw-modal{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;display:flex;align-items:flex-end;justify-content:center}
+@media(min-width:480px){.pw-modal{align-items:center}}
+.pw-box{
+  background:var(--perga);
+  border-radius:20px 20px 0 0;
+  padding:24px 24px calc(24px + var(--safe-bottom));
+  width:100%;max-width:380px;
+  text-align:center;
+  box-shadow:0 -4px 30px rgba(0,0,0,.3);
+  border:1px solid var(--gold-d);border-bottom:none;
+}
+@media(min-width:480px){
+  .pw-box{border-radius:var(--r);border:1px solid var(--gold-d);padding:28px}
+}
+.pw-box h3{font-size:20px;margin-bottom:4px;color:var(--navy)}
+.pw-box p{font-size:13px;color:var(--testo-l);margin-bottom:16px;font-style:italic}
+.pw-input{
+  width:100%;border:1.5px solid var(--perga3);
+  border-radius:10px;padding:14px 12px;
+  font-family:inherit;font-size:18px;margin-bottom:12px;
+  text-align:center;letter-spacing:6px;background:white;
+}
+.pw-input:focus{outline:none;border-color:var(--navy)}
+.pw-enter{
+  width:100%;background:var(--navy);color:var(--gold);
+  border:none;border-radius:12px;padding:15px;
+  font-size:16px;font-weight:bold;cursor:pointer;font-family:inherit;min-height:52px;
+}
+.pw-cancel{
+  width:100%;background:none;border:none;color:var(--testo-l);
+  padding:12px;cursor:pointer;font-size:14px;margin-top:4px;font-family:inherit;
+}
+.pw-error{color:#b00;font-size:13px;margin-bottom:10px}
+
+/* ═══ TOAST ═══ */
+.toast{
+  position:fixed;bottom:calc(88px + var(--safe-bottom));
+  left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--navy);color:var(--gold);
+  padding:10px 22px;border-radius:50px;
+  border:1px solid var(--gold-d);
+  font-size:14px;box-shadow:0 4px 20px rgba(0,0,0,.3);
+  transition:.3s;z-index:500;
+  opacity:0;pointer-events:none;white-space:nowrap;
+  max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(min-width:768px){
+  .toast{bottom:24px}
+}
+
+/* ═══ FOOTER ═══ */
+footer{
+  background:var(--navy);color:rgba(255,255,255,.55);
+  text-align:center;padding:20px 16px;font-size:12px;
+  border-top:2.5px solid var(--gold);letter-spacing:.3px;
+  margin-top:24px;
+}
+footer span{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- ═══ BURGER OVERLAY + DRAWER ═══ -->
+<div class="burger-overlay" id="burger-overlay" onclick="closeBurger()"></div>
+<div class="burger-drawer" id="burger-drawer">
+  <div class="bd-top">
+    <img class="bd-logo" src="logo.png" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="bd-logo-fallback" style="display:none">🌞</div>
+    <div class="bd-brand">
+      <div class="bd-nome">ilbuonodalsud.it</div>
+      <div class="bd-sub">Dal Sud, al Nord.</div>
+    </div>
+  </div>
+  <div class="bd-nav" id="bd-nav"><div class="bd-section-label">Categorie</div>
+      <button class="bd-item active" onclick="filterCat('Tutti');closeBurger()">
+        <span class="bd-item-icon">🏠</span>
+        Tutti
+      </button>
+      <button class="bd-item" onclick="filterCat('Latticini');closeBurger()">
+        <span class="bd-item-icon">🥛</span>
+        Latticini
+      </button>
+      <button class="bd-item" onclick="filterCat('Sott'oli &amp; Conserve');closeBurger()">
+        <span class="bd-item-icon">🫙</span>
+        Sott'oli &amp; Conserve
+      </button>
+      <button class="bd-item" onclick="filterCat('Verdure');closeBurger()">
+        <span class="bd-item-icon">🌿</span>
+        Verdure
+      </button>
+      <button class="bd-item" onclick="filterCat('Pane &amp; Dolci');closeBurger()">
+        <span class="bd-item-icon">🍞</span>
+        Pane &amp; Dolci
+      </button>
+      <button class="bd-item" onclick="filterCat('Vino &amp; Bevande');closeBurger()">
+        <span class="bd-item-icon">🍷</span>
+        Vino &amp; Bevande
+      </button><div class="bd-divider"></div>
+     <button class="bd-item" onclick="toggleCart();closeBurger()">
+       <span class="bd-item-icon">🛒</span> Il mio ordine
+     </button></div>
+  <div class="bd-bottom">
+    <button class="bd-admin-btn" onclick="closeBurger();openAdminCheck()">
+      <span>⚙</span> Gestione catalogo
+    </button>
+  </div>
+</div>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <a class="logo-wrap" href="#">
+    <img class="header-logo" src="logo.png" alt="Logo" onerror="this.style.display='none'">
+    <div class="logo-testi">
+      <div class="logo-nome">ilbuonodalsud.it</div>
+      <div class="logo-sub">Nicola porta al Nord i sapori del Sud</div>
+    </div>
+  </a>
+  <div style="display:flex;align-items:center;gap:4px">
+    <!-- bottone carrello desktop -->
+    <button class="cart-header-btn" onclick="toggleCart()">
+      🛒 Ordine <span id="cart-count-h">0</span>
+    </button>
+    <!-- burger -->
+    <button class="burger-btn" id="burger-btn" onclick="toggleBurger()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-seal">
+    <img src="logo.png" alt="Il Buono dal Sud" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="hero-seal-fallback" style="display:none">🌞</div>
+  </div>
+  <div class="hero-nicola">
+    <span class="hero-nicola-text">— NICOLA —</span>
+  </div>
+  <div class="hero-banner">
+    <h1>Dal Sud, al Nord.<br><span>I sapori autentici della nostra terra.</span></h1>
+  </div>
+  <p class="hero-sub" style="margin-top:12px">
+    Scegli i prodotti, aggiungili al carrello e inviaci l'ordine su WhatsApp.
+  </p>
+  <div class="hero-tags">
+    <span class="htag">🥛 Mozzarella di Bufala</span>
+    <span class="htag">🍶 Ricotta</span>
+    <span class="htag">🫙 Pomodorini Sott'olio</span>
+    <span class="htag">🌿 Friarielli</span>
+    <span class="htag">🍷 Vino</span>
+  </div>
+</div>
+
+<!-- ═══ FILTRI CATEGORIA ═══ -->
+<div class="cat-filters" id="cat-filters"><button class="cat-pill active" onclick="filterCat('Tutti')"> Tutti</button><button class="cat-pill" onclick="filterCat('Latticini')">🥛 Latticini</button><button class="cat-pill" onclick="filterCat('Sott'oli &amp; Conserve')">🫙 Sott'oli &amp; Conserve</button><button class="cat-pill" onclick="filterCat('Verdure')">🌿 Verdure</button><button class="cat-pill" onclick="filterCat('Pane &amp; Dolci')">🍞 Pane &amp; Dolci</button><button class="cat-pill" onclick="filterCat('Vino &amp; Bevande')">🍷 Vino &amp; Bevande</button></div>
+
+<!-- ═══ CATALOGO ═══ -->
+<div class="container" id="catalogo"><div>
+      <div class="section-head">
+        <div class="divider"><div class="divider-icon">✦</div></div>
+        <div class="section-title-text">🥛 Latticini</div>
+        <div class="divider"><div class="divider-icon">✦</div></div>
+      </div><div class="products-grid"><div class="card" id="card-p1">
+        <div class="card-img img-ok" id="cimg-p1"><img src="https://www.agricolapiandelmedico.it/wp-content/uploads/2021/10/mozzarella-di-bufala.jpg" alt="Mozzarella di Bufala" onload="document.getElementById('cimg-p1').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">🥛</span></div>
+        <div class="card-body">
+          <div class="card-cat">Latticini</div>
+          <div class="card-name">Mozzarella di Bufala</div>
+          <div class="card-desc">Fresca, 250g, bufala campana DOP</div>
+          <div class="card-price">€ 4,50 <span>/ cad</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p1',-1)">−</button>
+            <span class="qty-val" id="qty-p1">1</span>
+            <button class="qty-btn" onclick="changeQty('p1',+1)">+</button>
+            <button class="add-btn" id="add-p1" onclick="addToCart('p1')">Aggiungi</button>
+          </div>
+        </div></div><div class="card" id="card-p2">
+        <div class="card-img img-ok" id="cimg-p2"><img src="https://thinkmilkbesmart.eu/wp-content/uploads/2022/12/burrata-pugliese.jpg" alt="Burrata" onload="document.getElementById('cimg-p2').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">🫧</span></div>
+        <div class="card-body">
+          <div class="card-cat">Latticini</div>
+          <div class="card-name">Burrata</div>
+          <div class="card-desc">Con panna fresca, 200g</div>
+          <div class="card-price">€ 4,00 <span>/ cad</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p2',-1)">−</button>
+            <span class="qty-val" id="qty-p2">1</span>
+            <button class="qty-btn" onclick="changeQty('p2',+1)">+</button>
+            <button class="add-btn" id="add-p2" onclick="addToCart('p2')">Aggiungi</button>
+          </div>
+        </div></div><div class="card" id="card-p3">
+        <div class="card-img img-ok" id="cimg-p3"><img src="https://caseificiomozzaricca.it/wp-content/uploads/2023/04/ricotta-di-bufala-mozzaricca.jpeg" alt="Ricotta di Bufala" onload="document.getElementById('cimg-p3').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">🍶</span></div>
+        <div class="card-body">
+          <div class="card-cat">Latticini</div>
+          <div class="card-name">Ricotta di Bufala</div>
+          <div class="card-desc">Cremosa, vasetto 500g</div>
+          <div class="card-price">€ 5,00 <span>/ vasch.</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p3',-1)">−</button>
+            <span class="qty-val" id="qty-p3">1</span>
+            <button class="qty-btn" onclick="changeQty('p3',+1)">+</button>
+            <button class="add-btn" id="add-p3" onclick="addToCart('p3')">Aggiungi</button>
+          </div>
+        </div></div></div></div><div>
+      <div class="section-head">
+        <div class="divider"><div class="divider-icon">✦</div></div>
+        <div class="section-title-text">🫙 Sott'oli &amp; Conserve</div>
+        <div class="divider"><div class="divider-icon">✦</div></div>
+      </div><div class="products-grid"><div class="card" id="card-p4">
+        <div class="card-img img-ok" id="cimg-p4"><img src="https://m.media-amazon.com/images/I/51tzvSaMpdL._AC_UF894,1000_QL80_.jpg" alt="Pomodorini Sott'olio" onload="document.getElementById('cimg-p4').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">🍅</span></div>
+        <div class="card-body">
+          <div class="card-cat">Sott'oli &amp; Conserve</div>
+          <div class="card-name">Pomodorini Sott'olio</div>
+          <div class="card-desc">Datterini del Sud in olio EVO, 300g</div>
+          <div class="card-price">€ 5,50 <span>/ vasetto</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p4',-1)">−</button>
+            <span class="qty-val" id="qty-p4">1</span>
+            <button class="qty-btn" onclick="changeQty('p4',+1)">+</button>
+            <button class="add-btn" id="add-p4" onclick="addToCart('p4')">Aggiungi</button>
+          </div>
+        </div></div><div class="card" id="card-p5">
+        <div class="card-img"><span class="card-emoji-fb">🍄</span></div>
+        <div class="card-body">
+          <div class="card-cat">Sott'oli &amp; Conserve</div>
+          <div class="card-name">Funghi Porcini Sott'olio</div>
+          <div class="card-desc">Raccolti a mano, vasetto 200g</div>
+          <div class="card-price">€ 7,50 <span>/ vasetto</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p5',-1)">−</button>
+            <span class="qty-val" id="qty-p5">1</span>
+            <button class="qty-btn" onclick="changeQty('p5',+1)">+</button>
+            <button class="add-btn" id="add-p5" onclick="addToCart('p5')">Aggiungi</button>
+          </div>
+        </div></div><div class="card" id="card-p6">
+        <div class="card-img"><span class="card-emoji-fb">🌶️</span></div>
+        <div class="card-body">
+          <div class="card-cat">Sott'oli &amp; Conserve</div>
+          <div class="card-name">Peperoni Cruschi</div>
+          <div class="card-desc">Friggitelli essiccati lucani, 100g</div>
+          <div class="card-price">€ 6,00 <span>/ busta</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p6',-1)">−</button>
+            <span class="qty-val" id="qty-p6">1</span>
+            <button class="qty-btn" onclick="changeQty('p6',+1)">+</button>
+            <button class="add-btn" id="add-p6" onclick="addToCart('p6')">Aggiungi</button>
+          </div>
+        </div></div></div></div><div>
+      <div class="section-head">
+        <div class="divider"><div class="divider-icon">✦</div></div>
+        <div class="section-title-text">🌿 Verdure</div>
+        <div class="divider"><div class="divider-icon">✦</div></div>
+      </div><div class="products-grid"><div class="card" id="card-p7">
+        <div class="card-img img-ok" id="cimg-p7"><img src="https://portalvhdsqpfw2zh6dh7f3.blob.core.windows.net/spesasicura/img/sub580/72851.png" alt="Friarielli" onload="document.getElementById('cimg-p7').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">🌿</span></div>
+        <div class="card-body">
+          <div class="card-cat">Verdure</div>
+          <div class="card-name">Friarielli</div>
+          <div class="card-desc">Broccoletti napoletani, mazzo ca. 500g</div>
+          <div class="card-price">€ 3,50 <span>/ mazzo</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p7',-1)">−</button>
+            <span class="qty-val" id="qty-p7">1</span>
+            <button class="qty-btn" onclick="changeQty('p7',+1)">+</button>
+            <button class="add-btn" id="add-p7" onclick="addToCart('p7')">Aggiungi</button>
+          </div>
+        </div></div></div></div><div>
+      <div class="section-head">
+        <div class="divider"><div class="divider-icon">✦</div></div>
+        <div class="section-title-text">🍞 Pane &amp; Dolci</div>
+        <div class="divider"><div class="divider-icon">✦</div></div>
+      </div><div class="products-grid"><div class="card" id="card-p8">
+        <div class="card-img img-ok" id="cimg-p8"><img src="https://patrioli.it/wp-content/uploads/2022/01/000559_M.jpg" alt="Babà al Rum" onload="document.getElementById('cimg-p8').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">🍮</span></div>
+        <div class="card-body">
+          <div class="card-cat">Pane &amp; Dolci</div>
+          <div class="card-name">Babà al Rum</div>
+          <div class="card-desc">Artigianale, monoporzione</div>
+          <div class="card-price">€ 2,00 <span>/ cad</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p8',-1)">−</button>
+            <span class="qty-val" id="qty-p8">1</span>
+            <button class="qty-btn" onclick="changeQty('p8',+1)">+</button>
+            <button class="add-btn" id="add-p8" onclick="addToCart('p8')">Aggiungi</button>
+          </div>
+        </div></div><div class="card" id="card-p9">
+        <div class="card-img"><span class="card-emoji-fb">🍞</span></div>
+        <div class="card-body">
+          <div class="card-cat">Pane &amp; Dolci</div>
+          <div class="card-name">Pane di Altamura</div>
+          <div class="card-desc">DOP, lievitazione naturale, ca. 500g</div>
+          <div class="card-price">€ 4,00 <span>/ filone</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p9',-1)">−</button>
+            <span class="qty-val" id="qty-p9">1</span>
+            <button class="qty-btn" onclick="changeQty('p9',+1)">+</button>
+            <button class="add-btn" id="add-p9" onclick="addToCart('p9')">Aggiungi</button>
+          </div>
+        </div></div></div></div><div>
+      <div class="section-head">
+        <div class="divider"><div class="divider-icon">✦</div></div>
+        <div class="section-title-text">🍷 Vino &amp; Bevande</div>
+        <div class="divider"><div class="divider-icon">✦</div></div>
+      </div><div class="products-grid"><div class="card" id="card-p10">
+        <div class="card-img"><span class="card-emoji-fb">🍷</span></div>
+        <div class="card-body">
+          <div class="card-cat">Vino &amp; Bevande</div>
+          <div class="card-name">Primitivo di Puglia</div>
+          <div class="card-desc">IGT, bottiglia 75cl</div>
+          <div class="card-price">€ 9,00 <span>/ bott.</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('p10',-1)">−</button>
+            <span class="qty-val" id="qty-p10">1</span>
+            <button class="qty-btn" onclick="changeQty('p10',+1)">+</button>
+            <button class="add-btn" id="add-p10" onclick="addToCart('p10')">Aggiungi</button>
+          </div>
+        </div></div></div></div></div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  © 2026 <span>ilbuonodalsud.it</span> &nbsp;·&nbsp; <span>Dal Sud, al Nord.</span>
+</footer>
+
+<!-- ═══ FAB CARRELLO (mobile) ═══ -->
+<button class="cart-fab" onclick="toggleCart()">
+  🛒 Il mio ordine <span class="cart-fab-count" id="cart-count">0</span>
+</button>
+
+<!-- ═══ CART ═══ -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-handle"></div>
+  <div class="cart-header">
+    <h2>🛒 Il tuo ordine</h2>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">Il carrello è vuoto.<br>Aggiungi i prodotti che vuoi! 🧺</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-totale">
+      <span>Totale stimato</span>
+      <span id="cart-total">€ 0,00</span>
+    </div>
+    <label class="client-label">I tuoi dati</label>
+    <div class="client-row">
+      <input class="client-input" type="text" id="f-nome-cliente" placeholder="Nome" autocomplete="given-name" autocorrect="off">
+      <input class="client-input" type="text" id="f-cognome-cliente" placeholder="Cognome" autocomplete="family-name" autocorrect="off">
+    </div>
+    <textarea class="note-field" id="note-field" rows="2" placeholder="Note: orario, indirizzo, varianti…"></textarea>
+    <button class="wa-btn" onclick="sendWhatsApp()">
+      <svg viewBox="0 0 32 32"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.47.668 4.784 1.832 6.77L2 30l7.438-1.95A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.46 11.46 0 01-5.836-1.598l-.418-.248-4.414 1.158 1.178-4.3-.272-.44A11.46 11.46 0 014.5 16C4.5 9.596 9.596 4.5 16 4.5S27.5 9.596 27.5 16 22.404 27.5 16 27.5zm6.29-8.54c-.346-.173-2.046-1.01-2.364-1.125-.317-.115-.548-.173-.778.173-.23.346-.892 1.125-1.093 1.355-.2.23-.403.26-.748.086-.347-.173-1.464-.54-2.788-1.72-1.03-.918-1.726-2.052-1.929-2.398-.2-.346-.02-.533.152-.705.155-.155.346-.403.52-.604.173-.202.23-.346.346-.577.115-.23.058-.433-.03-.606-.086-.173-.778-1.875-1.066-2.567-.28-.674-.566-.583-.778-.594l-.663-.012c-.23 0-.604.087-.92.433-.317.346-1.207 1.18-1.207 2.878 0 1.698 1.236 3.34 1.409 3.57.173.23 2.432 3.713 5.893 5.208.824.355 1.466.568 1.966.727.826.264 1.578.227 2.172.138.663-.099 2.046-.835 2.334-1.642.288-.806.288-1.498.2-1.642-.086-.144-.317-.23-.664-.403z"></path></svg>
+      Invia ordine su WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- ═══ PASSWORD MODAL ═══ -->
+<div class="pw-modal" id="pw-modal" style="display: none;">
+  <div class="pw-box">
+    <h3>🔒 Area Gestione</h3>
+    <p>Inserisci la password per accedere al pannello</p>
+    <div class="pw-error" id="pw-error" style="display:none">Password errata</div>
+    <input class="pw-input" type="password" id="pw-input" placeholder="••••••" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-enter" onclick="checkPw()">Entra</button>
+    <button class="pw-cancel" onclick="closePwModal()">Annulla</button>
+  </div>
+</div>
+
+<!-- ═══ ADMIN PANEL ═══ -->
+<div class="admin-overlay open" id="admin-overlay" onclick="toggleAdmin()"></div>
+<div class="admin-panel open" id="admin-panel">
+  <div class="admin-header">
+    <h2>⚙ Gestione Catalogo</h2>
+    <button class="close-btn" onclick="toggleAdmin()">✕</button>
+  </div>
+  <div class="admin-body">
+    <!-- WhatsApp -->
+    <div class="admin-form">
+      <h3>📱 Numero WhatsApp</h3>
+      <div class="form-row full">
+        <div class="field">
+          <label>Numero (con prefisso, senza + — es. 393331234567)</label>
+          <input type="tel" id="wa-number-input" placeholder="393331234567" inputmode="numeric">
+        </div>
+      </div>
+      <button class="add-product-btn" onclick="saveWaNumber()">💾 Salva numero</button>
+    </div>
+
+    <!-- Form prodotto -->
+    <div class="admin-form">
+      <h3 id="form-title">➕ Aggiungi prodotto</h3>
+      <div class="form-row">
+        <div class="field">
+          <label>Nome *</label>
+          <input type="text" id="f-nome" placeholder="es. Mozzarella di Bufala">
+        </div>
+        <div class="field">
+          <label>Categoria *</label>
+          <select id="f-cat">
+            <option value="Latticini">🥛 Latticini</option>
+            <option value="Sott'oli &amp; Conserve">🫙 Sott'oli &amp; Conserve</option>
+            <option value="Pane &amp; Dolci">🍞 Pane &amp; Dolci</option>
+            <option value="Vino &amp; Bevande">🍷 Vino &amp; Bevande</option>
+            <option value="Verdure">🌿 Verdure</option>
+            <option value="Altro">🧺 Altro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Prezzo (€) *</label>
+          <input type="number" id="f-prezzo" step="0.50" min="0" placeholder="5.00" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>Unità</label>
+          <input type="text" id="f-unita" placeholder="cad / kg / vasetto…">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="field">
+          <label>Descrizione</label>
+          <input type="text" id="f-desc" placeholder="es. Fresca, 250g, bufala DOP">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>URL foto (oppure lascia vuoto)</label>
+          <input type="url" id="f-img" placeholder="https://…">
+        </div>
+        <div class="field">
+          <label>Emoji (se senza foto)</label>
+          <input type="text" id="f-emoji" placeholder="🧀" maxlength="4">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+        <button class="add-product-btn" id="form-submit-btn" onclick="submitForm()">➕ Aggiungi al catalogo</button>
+        <button class="add-product-btn" id="form-cancel-btn" onclick="cancelEdit()" style="display:none;background:transparent;border:1.5px solid var(--testo-l);color:var(--testo-l)">
+          ✕ Annulla
+        </button>
+      </div>
+    </div>
+
+    <!-- Salva sito -->
+    <div class="admin-form" style="background:rgba(35,134,54,.08);border-color:rgba(35,134,54,.3)">
+      <h3 style="color:#1a5c2a">💾 Salva le modifiche nel sito</h3>
+      <p style="font-size:13px;color:var(--testo-l);margin-bottom:12px;line-height:1.5">
+        I prodotti che hai aggiunto o modificato vengono salvati <em>solo su questo browser</em>.<br>
+        Clicca il pulsante per scaricare il sito aggiornato con tutti i tuoi prodotti incorporati, poi caricalo su GitHub.
+      </p>
+      <button class="add-product-btn" onclick="downloadSito()" style="background:#238636;width:100%;font-size:15px">
+        ⬇️ Scarica sito aggiornato (index.html)
+      </button>
+    </div>
+
+    <!-- Lista prodotti -->
+    <div class="admin-list">
+      <h3>📋 Prodotti nel catalogo</h3>
+      <div id="admin-product-list"><p style="font-size:11px;font-weight:bold;color:var(--testo-l);margin:12px 0 6px;letter-spacing:1px">LATTICINI</p><div class="admin-item">
+        <div class="ai-img"><img src="https://www.agricolapiandelmedico.it/wp-content/uploads/2021/10/mozzarella-di-bufala.jpg" alt="" onerror="this.parentNode.innerHTML='🥛'"></div>
+        <div class="ai-info">
+          <div class="ai-name">Mozzarella di Bufala</div>
+          <div class="ai-meta">€ 4,50 / cad</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p1')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p1')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p1')" title="Elimina">🗑</button>
+        </div>
+      </div><div class="admin-item">
+        <div class="ai-img"><img src="https://thinkmilkbesmart.eu/wp-content/uploads/2022/12/burrata-pugliese.jpg" alt="" onerror="this.parentNode.innerHTML='🫧'"></div>
+        <div class="ai-info">
+          <div class="ai-name">Burrata</div>
+          <div class="ai-meta">€ 4,00 / cad</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p2')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p2')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p2')" title="Elimina">🗑</button>
+        </div>
+      </div><div class="admin-item">
+        <div class="ai-img"><img src="https://caseificiomozzaricca.it/wp-content/uploads/2023/04/ricotta-di-bufala-mozzaricca.jpeg" alt="" onerror="this.parentNode.innerHTML='🍶'"></div>
+        <div class="ai-info">
+          <div class="ai-name">Ricotta di Bufala</div>
+          <div class="ai-meta">€ 5,00 / vasch.</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p3')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p3')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p3')" title="Elimina">🗑</button>
+        </div>
+      </div><p style="font-size:11px;font-weight:bold;color:var(--testo-l);margin:12px 0 6px;letter-spacing:1px">SOTT'OLI &amp; CONSERVE</p><div class="admin-item">
+        <div class="ai-img"><img src="https://m.media-amazon.com/images/I/51tzvSaMpdL._AC_UF894,1000_QL80_.jpg" alt="" onerror="this.parentNode.innerHTML='🍅'"></div>
+        <div class="ai-info">
+          <div class="ai-name">Pomodorini Sott'olio</div>
+          <div class="ai-meta">€ 5,50 / vasetto</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p4')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p4')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p4')" title="Elimina">🗑</button>
+        </div>
+      </div><div class="admin-item">
+        <div class="ai-img">🍄</div>
+        <div class="ai-info">
+          <div class="ai-name">Funghi Porcini Sott'olio</div>
+          <div class="ai-meta">€ 7,50 / vasetto</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p5')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p5')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p5')" title="Elimina">🗑</button>
+        </div>
+      </div><div class="admin-item">
+        <div class="ai-img">🌶️</div>
+        <div class="ai-info">
+          <div class="ai-name">Peperoni Cruschi</div>
+          <div class="ai-meta">€ 6,00 / busta</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p6')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p6')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p6')" title="Elimina">🗑</button>
+        </div>
+      </div><p style="font-size:11px;font-weight:bold;color:var(--testo-l);margin:12px 0 6px;letter-spacing:1px">VERDURE</p><div class="admin-item">
+        <div class="ai-img"><img src="https://portalvhdsqpfw2zh6dh7f3.blob.core.windows.net/spesasicura/img/sub580/72851.png" alt="" onerror="this.parentNode.innerHTML='🌿'"></div>
+        <div class="ai-info">
+          <div class="ai-name">Friarielli</div>
+          <div class="ai-meta">€ 3,50 / mazzo</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p7')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p7')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p7')" title="Elimina">🗑</button>
+        </div>
+      </div><p style="font-size:11px;font-weight:bold;color:var(--testo-l);margin:12px 0 6px;letter-spacing:1px">PANE &amp; DOLCI</p><div class="admin-item">
+        <div class="ai-img"><img src="https://patrioli.it/wp-content/uploads/2022/01/000559_M.jpg" alt="" onerror="this.parentNode.innerHTML='🍮'"></div>
+        <div class="ai-info">
+          <div class="ai-name">Babà al Rum</div>
+          <div class="ai-meta">€ 2,00 / cad</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p8')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p8')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p8')" title="Elimina">🗑</button>
+        </div>
+      </div><div class="admin-item">
+        <div class="ai-img">🍞</div>
+        <div class="ai-info">
+          <div class="ai-name">Pane di Altamura</div>
+          <div class="ai-meta">€ 4,00 / filone</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p9')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p9')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p9')" title="Elimina">🗑</button>
+        </div>
+      </div><p style="font-size:11px;font-weight:bold;color:var(--testo-l);margin:12px 0 6px;letter-spacing:1px">VINO &amp; BEVANDE</p><div class="admin-item">
+        <div class="ai-img">🍷</div>
+        <div class="ai-info">
+          <div class="ai-name">Primitivo di Puglia</div>
+          <div class="ai-meta">€ 9,00 / bott.</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle" onclick="toggleProduct('p10')" title="Nascondi">👁</button>
+          <button class="ai-edit" onclick="editProduct('p10')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('p10')" title="Elimina">🗑</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+const ADMIN_PASSWORD = "nicola2025";
+
+const PRODOTTI_DEFAULT = [
+  {
+    "id": "p1",
+    "cat": "Latticini",
+    "nome": "Mozzarella di Bufala",
+    "desc": "Fresca, 250g, bufala campana DOP",
+    "prezzo": 4.5,
+    "unita": "cad",
+    "emoji": "🥛",
+    "img": "https://www.agricolapiandelmedico.it/wp-content/uploads/2021/10/mozzarella-di-bufala.jpg",
+    "attivo": true
+  },
+  {
+    "id": "p2",
+    "cat": "Latticini",
+    "nome": "Burrata",
+    "desc": "Con panna fresca, 200g",
+    "prezzo": 4,
+    "unita": "cad",
+    "emoji": "🫧",
+    "img": "https://thinkmilkbesmart.eu/wp-content/uploads/2022/12/burrata-pugliese.jpg",
+    "attivo": true
+  },
+  {
+    "id": "p3",
+    "cat": "Latticini",
+    "nome": "Ricotta di Bufala",
+    "desc": "Cremosa, vasetto 500g",
+    "prezzo": 5,
+    "unita": "vasch.",
+    "emoji": "🍶",
+    "img": "https://caseificiomozzaricca.it/wp-content/uploads/2023/04/ricotta-di-bufala-mozzaricca.jpeg",
+    "attivo": true
+  },
+  {
+    "id": "p4",
+    "cat": "Sott'oli & Conserve",
+    "nome": "Pomodorini Sott'olio",
+    "desc": "Datterini del Sud in olio EVO, 300g",
+    "prezzo": 5.5,
+    "unita": "vasetto",
+    "emoji": "🍅",
+    "img": "https://m.media-amazon.com/images/I/51tzvSaMpdL._AC_UF894,1000_QL80_.jpg",
+    "attivo": true
+  },
+  {
+    "id": "p5",
+    "cat": "Sott'oli & Conserve",
+    "nome": "Funghi Porcini Sott'olio",
+    "desc": "Raccolti a mano, vasetto 200g",
+    "prezzo": 7.5,
+    "unita": "vasetto",
+    "emoji": "🍄",
+    "img": "",
+    "attivo": true
+  },
+  {
+    "id": "p6",
+    "cat": "Sott'oli & Conserve",
+    "nome": "Peperoni Cruschi",
+    "desc": "Friggitelli essiccati lucani, 100g",
+    "prezzo": 6,
+    "unita": "busta",
+    "emoji": "🌶️",
+    "img": "",
+    "attivo": true
+  },
+  {
+    "id": "p7",
+    "cat": "Verdure",
+    "nome": "Friarielli",
+    "desc": "Broccoletti napoletani, mazzo ca. 500g",
+    "prezzo": 3.5,
+    "unita": "mazzo",
+    "emoji": "🌿",
+    "img": "https://portalvhdsqpfw2zh6dh7f3.blob.core.windows.net/spesasicura/img/sub580/72851.png",
+    "attivo": true
+  },
+  {
+    "id": "p8",
+    "cat": "Pane & Dolci",
+    "nome": "Babà al Rum",
+    "desc": "Artigianale, monoporzione",
+    "prezzo": 2,
+    "unita": "cad",
+    "emoji": "🍮",
+    "img": "https://patrioli.it/wp-content/uploads/2022/01/000559_M.jpg",
+    "attivo": true
+  },
+  {
+    "id": "p9",
+    "cat": "Pane & Dolci",
+    "nome": "Pane di Altamura",
+    "desc": "DOP, lievitazione naturale, ca. 500g",
+    "prezzo": 4,
+    "unita": "filone",
+    "emoji": "🍞",
+    "img": "",
+    "attivo": true
+  },
+  {
+    "id": "p10",
+    "cat": "Vino & Bevande",
+    "nome": "Primitivo di Puglia",
+    "desc": "IGT, bottiglia 75cl",
+    "prezzo": 9,
+    "unita": "bott.",
+    "emoji": "🍷",
+    "img": "",
+    "attivo": true
+  }
+];
+
+const CAT_ICONS={"Latticini":"🥛","Sott'oli & Conserve":"🫙","Pane & Dolci":"🍞","Vino & Bevande":"🍷","Verdure":"🌿","Altro":"🧺"};
+
+function loadData(){
+  try{const d=JSON.parse(localStorage.getItem("ibds_prodotti"));return d&&d.length?d:JSON.parse(JSON.stringify(PRODOTTI_DEFAULT));}
+  catch(e){return JSON.parse(JSON.stringify(PRODOTTI_DEFAULT));}
+}
+function saveData(){localStorage.setItem("ibds_prodotti",JSON.stringify(prodotti));}
+function loadWa(){return localStorage.getItem("ibds_wa")||"39XXXXXXXXXX";}
+function saveWaLS(n){localStorage.setItem("ibds_wa",n);}
+
+let prodotti=loadData();
+let waNumber=loadWa();
+const cart={};
+const localQty={};
+let editingId=null;
+let activeCat="Tutti";
+
+// ── Burger menu ──
+function toggleBurger(){
+  const btn=document.getElementById("burger-btn");
+  const drawer=document.getElementById("burger-drawer");
+  const overlay=document.getElementById("burger-overlay");
+  btn.classList.toggle("open");
+  drawer.classList.toggle("open");
+  overlay.classList.toggle("open");
+}
+function closeBurger(){
+  document.getElementById("burger-btn").classList.remove("open");
+  document.getElementById("burger-drawer").classList.remove("open");
+  document.getElementById("burger-overlay").classList.remove("open");
+}
+
+// ── Filtri categoria ──
+function renderFilters(){
+  const bar=document.getElementById("cat-filters");
+  const nav=document.getElementById("bd-nav");
+  const cats=["Tutti",...new Set(prodotti.filter(p=>p.attivo).map(p=>p.cat))];
+
+  // pill bar
+  bar.innerHTML=cats.map(c=>
+    `<button class="cat-pill${activeCat===c?' active':''}" onclick="filterCat('${c}')">${CAT_ICONS[c]||''} ${c}</button>`
+  ).join("");
+
+  // drawer nav
+  nav.innerHTML=`<div class="bd-section-label">Categorie</div>`+
+    cats.map(c=>`
+      <button class="bd-item${activeCat===c?' active':''}" onclick="filterCat('${c}');closeBurger()">
+        <span class="bd-item-icon">${c==='Tutti'?'🏠':(CAT_ICONS[c]||'📦')}</span>
+        ${c}
+      </button>`).join("")+
+    `<div class="bd-divider"></div>
+     <button class="bd-item" onclick="toggleCart();closeBurger()">
+       <span class="bd-item-icon">🛒</span> Il mio ordine
+     </button>`;
+}
+function filterCat(cat){
+  activeCat=cat;
+  renderFilters();
+  renderCatalogo();
+  document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
+}
+
+// ── Catalogo ──
+function renderCatalogo(){
+  const container=document.getElementById("catalogo");
+  container.innerHTML="";
+  const attivi=prodotti.filter(p=>p.attivo&&(activeCat==="Tutti"||p.cat===activeCat));
+  if(!attivi.length){
+    container.innerHTML=`<p style="text-align:center;color:var(--testo-l);padding:40px;font-style:italic">Nessun prodotto disponibile.</p>`;
+    return;
+  }
+  const cats=activeCat==="Tutti"?[...new Set(attivi.map(p=>p.cat))]:[activeCat];
+  cats.forEach(cat=>{
+    const items=attivi.filter(p=>p.cat===cat);
+    const sec=document.createElement("div");
+    sec.innerHTML=`
+      <div class="section-head">
+        <div class="divider"><div class="divider-icon">✦</div></div>
+        <div class="section-title-text">${CAT_ICONS[cat]||'📦'} ${cat}</div>
+        <div class="divider"><div class="divider-icon">✦</div></div>
+      </div>`;
+    const grid=document.createElement("div");
+    grid.className="products-grid";
+    items.forEach(p=>{
+      if(!localQty[p.id]) localQty[p.id]=1;
+      const imgHtml=p.img
+        ?`<div class="card-img" id="cimg-${p.id}"><img src="${p.img}" alt="${p.nome}" onload="document.getElementById('cimg-${p.id}').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">${p.emoji||'📦'}</span></div>`
+        :`<div class="card-img"><span class="card-emoji-fb">${p.emoji||'📦'}</span></div>`;
+      const card=document.createElement("div");
+      card.className="card";card.id="card-"+p.id;
+      card.innerHTML=`
+        ${imgHtml}
+        <div class="card-body">
+          <div class="card-cat">${cat}</div>
+          <div class="card-name">${p.nome}</div>
+          <div class="card-desc">${p.desc||''}</div>
+          <div class="card-price">${fmt(p.prezzo)} <span>/ ${p.unita||'cad'}</span></div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button>
+            <span class="qty-val" id="qty-${p.id}">1</span>
+            <button class="qty-btn" onclick="changeQty('${p.id}',+1)">+</button>
+            <button class="add-btn" id="add-${p.id}" onclick="addToCart('${p.id}')">Aggiungi</button>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+    sec.appendChild(grid);
+    container.appendChild(sec);
+  });
+}
+
+function changeQty(id,delta){
+  localQty[id]=Math.max(1,(localQty[id]||1)+delta);
+  const el=document.getElementById("qty-"+id);
+  if(el) el.textContent=localQty[id];
+}
+function findP(id){return prodotti.find(p=>p.id===id);}
+
+function addToCart(id){
+  const p=findP(id);if(!p) return;
+  const qty=localQty[id]||1;
+  cart[id]=(cart[id]||0)+qty;
+  const btn=document.getElementById("add-"+id);
+  if(btn){btn.textContent="✓";btn.classList.add("added");
+    setTimeout(()=>{btn.textContent="Aggiungi";btn.classList.remove("added");},1400);}
+  showToast(p.nome+" aggiunto ✓");
+  updateCartUI();
+}
+function cartChangeQty(id,delta){
+  cart[id]=(cart[id]||0)+delta;
+  if(cart[id]<=0) delete cart[id];
+  updateCartUI();
+}
+function updateCartUI(){
+  const items=document.getElementById("cart-items");
+  const count=document.getElementById("cart-count");
+  const countH=document.getElementById("cart-count-h");
+  const total=document.getElementById("cart-total");
+  const entries=Object.entries(cart);
+  const totQty=entries.reduce((s,[,q])=>s+q,0);
+  const totEur=entries.reduce((s,[id,q])=>{const p=findP(id);return s+(p?p.prezzo*q:0);},0);
+  count.textContent=totQty;
+  countH.textContent=totQty;
+  total.textContent=fmt(totEur);
+  if(!entries.length){
+    items.innerHTML='<div class="cart-empty">Il carrello è vuoto.<br>Aggiungi i prodotti che vuoi! 🧺</div>';
+    return;
+  }
+  items.innerHTML=entries.map(([id,qty])=>{
+    const p=findP(id);if(!p) return "";
+    const imgHtml=p.img
+      ?`<div class="ci-img" id="ciimg-${id}"><img src="${p.img}" alt="" onload="document.getElementById('ciimg-${id}').classList.add('img-ok')" onerror=""><span class="card-emoji-fb">${p.emoji||'📦'}</span></div>`
+      :`<div class="ci-img">${p.emoji||'📦'}</div>`;
+    return `<div class="cart-item">
+      ${imgHtml}
+      <div class="ci-info">
+        <div class="ci-name">${p.nome}</div>
+        <div class="ci-unit">${fmt(p.prezzo)} / ${p.unita||'cad'}</div>
+        <div class="ci-qty-row">
+          <button class="ci-qb" onclick="cartChangeQty('${id}',-1)">−</button>
+          <span class="ci-qv">${qty}</span>
+          <button class="ci-qb" onclick="cartChangeQty('${id}',+1)">+</button>
+        </div>
+      </div>
+      <div class="ci-tot">${fmt(p.prezzo*qty)}</div>
+    </div>`;
+  }).join("");
+}
+
+function toggleCart(){
+  document.getElementById("cart-panel").classList.toggle("open");
+  document.getElementById("cart-overlay").classList.toggle("open");
+}
+
+function sendWhatsApp(){
+  const entries=Object.entries(cart);
+  if(!entries.length){showToast("Aggiungi almeno un prodotto!");return;}
+  const nome=document.getElementById("f-nome-cliente").value.trim();
+  const cognome=document.getElementById("f-cognome-cliente").value.trim();
+  if(!nome||!cognome){
+    showToast("Inserisci nome e cognome!");
+    document.getElementById("f-nome-cliente").focus();
+    return;
+  }
+  const note=document.getElementById("note-field").value.trim();
+  let msg=`🌿 *Ordine — ilbuonodalsud.it*\n`;
+  msg+=`👤 *${nome} ${cognome}*\n\n`;
+  entries.forEach(([id,qty])=>{
+    const p=findP(id);
+    if(p) msg+=`• ${p.emoji||''} ${p.nome} — ${qty} ${p.unita||'cad'} — ${fmt(p.prezzo*qty)}\n`;
+  });
+  const tot=entries.reduce((s,[id,q])=>{const p=findP(id);return s+(p?p.prezzo*q:0);},0);
+  msg+=`\n💰 *Totale stimato: ${fmt(tot)}*`;
+  if(note) msg+=`\n📝 *Note:* ${note}`;
+  msg+=`\n\n_Ordine inviato dal sito_`;
+  window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+
+// ── Admin ──
+function openAdminCheck(){
+  document.getElementById("pw-modal").style.display="flex";
+  document.getElementById("pw-input").value="";
+  document.getElementById("pw-error").style.display="none";
+  setTimeout(()=>document.getElementById("pw-input").focus(),300);
+}
+function closePwModal(){document.getElementById("pw-modal").style.display="none";}
+function checkPw(){
+  if(document.getElementById("pw-input").value===ADMIN_PASSWORD){closePwModal();openAdmin();}
+  else{document.getElementById("pw-error").style.display="block";document.getElementById("pw-input").value="";}
+}
+function openAdmin(){
+  document.getElementById("wa-number-input").value=waNumber;
+  renderAdminList();
+  document.getElementById("admin-panel").classList.add("open");
+  document.getElementById("admin-overlay").classList.add("open");
+}
+function toggleAdmin(){
+  document.getElementById("admin-panel").classList.remove("open");
+  document.getElementById("admin-overlay").classList.remove("open");
+}
+function saveWaNumber(){
+  const v=document.getElementById("wa-number-input").value.trim();
+  if(!v){showToast("Numero non valido");return;}
+  waNumber=v;saveWaLS(v);showToast("Numero WhatsApp salvato ✓");
+}
+function submitForm(){
+  const nome=document.getElementById("f-nome").value.trim();
+  const cat=document.getElementById("f-cat").value;
+  const prez=parseFloat(document.getElementById("f-prezzo").value);
+  const unita=document.getElementById("f-unita").value.trim()||"cad";
+  const desc=document.getElementById("f-desc").value.trim();
+  const img=document.getElementById("f-img").value.trim().replace(/^['"]|['"]$/g,'');
+  const emoji=document.getElementById("f-emoji").value.trim()||"📦";
+  if(!nome||isNaN(prez)){showToast("Inserisci almeno nome e prezzo");return;}
+  if(editingId){
+    const p=findP(editingId);
+    if(p){p.nome=nome;p.cat=cat;p.prezzo=prez;p.unita=unita;p.desc=desc;p.img=img;p.emoji=emoji;}
+    saveData();renderCatalogo();renderFilters();renderAdminList();
+    showToast(nome+" aggiornato ✓");cancelEdit();
+  } else {
+    prodotti.push({id:"p"+Date.now(),cat,nome,desc,prezzo:prez,unita,emoji,img,attivo:true});
+    saveData();renderCatalogo();renderFilters();renderAdminList();
+    resetForm();showToast(nome+" aggiunto ✓");
+  }
+}
+function editProduct(id){
+  const p=findP(id);if(!p) return;
+  editingId=id;
+  document.getElementById("f-nome").value=p.nome;
+  document.getElementById("f-cat").value=p.cat;
+  document.getElementById("f-prezzo").value=p.prezzo;
+  document.getElementById("f-unita").value=p.unita||"";
+  document.getElementById("f-desc").value=p.desc||"";
+  document.getElementById("f-img").value=p.img||"";
+  document.getElementById("f-emoji").value=p.emoji||"";
+  document.getElementById("form-title").textContent="✏️ Modifica: "+p.nome;
+  document.getElementById("form-submit-btn").textContent="💾 Salva modifiche";
+  document.getElementById("form-cancel-btn").style.display="inline-block";
+  document.getElementById("form-title").scrollIntoView({behavior:"smooth",block:"center"});
+}
+function cancelEdit(){
+  editingId=null;resetForm();
+  document.getElementById("form-title").textContent="➕ Aggiungi prodotto";
+  document.getElementById("form-submit-btn").textContent="➕ Aggiungi al catalogo";
+  document.getElementById("form-cancel-btn").style.display="none";
+}
+function resetForm(){
+  ["f-nome","f-prezzo","f-unita","f-desc","f-img","f-emoji"].forEach(id=>document.getElementById(id).value="");
+}
+function deleteProduct(id){
+  if(!confirm("Eliminare questo prodotto?")) return;
+  prodotti=prodotti.filter(p=>p.id!==id);
+  delete cart[id];saveData();renderCatalogo();renderFilters();renderAdminList();updateCartUI();
+  showToast("Prodotto eliminato");
+}
+function toggleProduct(id){
+  const p=findP(id);if(!p) return;
+  p.attivo=!p.attivo;saveData();renderCatalogo();renderFilters();renderAdminList();
+  showToast(p.attivo?p.nome+" attivato":p.nome+" nascosto");
+}
+function renderAdminList(){
+  const list=document.getElementById("admin-product-list");
+  if(!prodotti.length){list.innerHTML='<p style="color:var(--testo-l);font-style:italic">Nessun prodotto</p>';return;}
+  const cats=[...new Set(prodotti.map(p=>p.cat))];
+  list.innerHTML=cats.map(cat=>{
+    const items=prodotti.filter(p=>p.cat===cat);
+    return `<p style="font-size:11px;font-weight:bold;color:var(--testo-l);margin:12px 0 6px;letter-spacing:1px">${cat.toUpperCase()}</p>`+
+    items.map(p=>{
+      const imgHtml=p.img
+        ?`<div class="ai-img"><img src="${p.img}" alt="" onerror="this.parentNode.innerHTML='${p.emoji||'📦'}'"></div>`
+        :`<div class="ai-img">${p.emoji||'📦'}</div>`;
+      return `<div class="admin-item">
+        ${imgHtml}
+        <div class="ai-info">
+          <div class="ai-name">${p.nome}</div>
+          <div class="ai-meta">${fmt(p.prezzo)} / ${p.unita}</div>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-toggle${p.attivo?'':' off'}" onclick="toggleProduct('${p.id}')" title="${p.attivo?'Nascondi':'Mostra'}">${p.attivo?'👁':'🚫'}</button>
+          <button class="ai-edit" onclick="editProduct('${p.id}')" title="Modifica">✏️</button>
+          <button class="ai-del" onclick="deleteProduct('${p.id}')" title="Elimina">🗑</button>
+        </div>
+      </div>`;
+    }).join("");
+  }).join("");
+}
+
+function downloadSito(){
+  try{
+    // Prende l'HTML completo della pagina
+    let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+    // Sostituisce PRODOTTI_DEFAULT con la lista attuale
+    const nuoviProdotti = JSON.stringify(prodotti, null, 2);
+    html = html.replace(
+      /const PRODOTTI_DEFAULT\s*=\s*\[[\s\S]*?\];/,
+      'const PRODOTTI_DEFAULT = ' + nuoviProdotti + ';'
+    );
+
+    // Aggiorna il numero WhatsApp nel codice
+    html = html.replace(
+      /const ADMIN_PASSWORD\s*=\s*"[^"]*";/,
+      'const ADMIN_PASSWORD = "' + ADMIN_PASSWORD + '";'
+    );
+
+    // Aggiorna il numero WA salvato
+    html = html.replace(
+      /function loadWa\(\)\{return localStorage\.getItem\("ibds_wa"\)\|\|"[^"]*";\}/,
+      'function loadWa(){return localStorage.getItem("ibds_wa")||"' + waNumber + '";}'
+    );
+
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'index.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    showToast('Sito scaricato ✓ Caricalo su GitHub!');
+  } catch(e){
+    showToast('Errore nel download — riprova');
+    console.error(e);
+  }
+}
+
+function fmt(n){return "€ "+n.toFixed(2).replace(".",",");}
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2400);
+}
+
+// ── Init ──
+renderFilters();
+renderCatalogo();
+</script>
+
+
+</body></html>
