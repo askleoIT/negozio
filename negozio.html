@@ -1226,6 +1226,12 @@ function renderAdminList(){
 
 function downloadSito(){
   try{
+    // Chiude tutti i pannelli aperti prima di catturare il DOM
+    ['admin-panel','admin-overlay','burger-drawer','burger-overlay','cart-panel','cart-overlay']
+      .forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('open'); });
+    const burgerBtn=document.getElementById('burger-btn');
+    if(burgerBtn) burgerBtn.classList.remove('open');
+
     // Prende l'HTML completo della pagina
     let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
