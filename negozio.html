@@ -48,7 +48,7 @@ header{
 }
 .logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
 .header-logo{
-  height:48px;width:48px;border-radius:50%;
+  height:46px;width:46px;border-radius:50%;
   border:2px solid var(--gold);object-fit:cover;flex-shrink:0;
 }
 .logo-testi{min-width:0}
@@ -57,13 +57,98 @@ header{
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .logo-sub{font-size:10px;color:rgba(255,255,255,.5);font-style:italic;display:none}
-.admin-btn{
-  background:transparent;border:1px solid rgba(255,255,255,.2);
-  border-radius:8px;color:rgba(255,255,255,.4);
-  cursor:pointer;padding:7px 10px;font-size:11px;
-  font-family:inherit;transition:.2s;white-space:nowrap;margin-right:8px;
+
+/* burger button */
+.burger-btn{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;justify-content:center;
+  gap:5px;padding:8px;margin-left:4px;
+  width:44px;height:44px;flex-shrink:0;
 }
-.admin-btn:hover,.admin-btn:active{border-color:var(--gold);color:var(--gold)}
+.burger-btn span{
+  display:block;height:2px;border-radius:2px;
+  background:var(--gold);transition:.3s;transform-origin:center;
+}
+.burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ═══ BURGER MENU DRAWER ═══ */
+.burger-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:150;opacity:0;pointer-events:none;transition:.3s;
+}
+.burger-overlay.open{opacity:1;pointer-events:auto}
+
+.burger-drawer{
+  position:fixed;top:0;left:0;bottom:0;
+  width:min(300px, 85vw);
+  background:var(--navy);
+  z-index:151;
+  display:flex;flex-direction:column;
+  transform:translateX(-100%);
+  transition:.35s cubic-bezier(.33,1,.68,1);
+  overflow:hidden;
+}
+.burger-drawer.open{transform:translateX(0)}
+
+/* drawer top — logo */
+.bd-top{
+  padding:20px 20px 16px;
+  border-bottom:1px solid rgba(201,162,39,.25);
+  display:flex;align-items:center;gap:12px;
+}
+.bd-logo{
+  width:54px;height:54px;border-radius:50%;
+  border:2px solid var(--gold);object-fit:cover;flex-shrink:0;
+}
+.bd-logo-fallback{
+  width:54px;height:54px;border-radius:50%;
+  border:2px solid var(--gold);background:var(--navy2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
+.bd-brand{flex:1;min-width:0}
+.bd-nome{font-size:15px;color:var(--gold);font-weight:bold}
+.bd-sub{font-size:10px;color:rgba(255,255,255,.5);font-style:italic;margin-top:2px}
+
+/* drawer nav */
+.bd-nav{flex:1;overflow-y:auto;padding:10px 0;-webkit-overflow-scrolling:touch}
+.bd-section-label{
+  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);padding:14px 20px 6px;
+}
+.bd-item{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 20px;color:rgba(255,255,255,.8);
+  font-size:15px;cursor:pointer;transition:.2s;
+  border:none;background:none;font-family:inherit;
+  width:100%;text-align:left;
+  border-left:3px solid transparent;
+}
+.bd-item:active,.bd-item.active{
+  background:rgba(201,162,39,.12);
+  color:var(--gold);
+  border-left-color:var(--gold);
+}
+.bd-item-icon{font-size:20px;width:26px;text-align:center;flex-shrink:0}
+.bd-divider{height:1px;background:rgba(255,255,255,.1);margin:8px 20px}
+
+/* drawer bottom */
+.bd-bottom{
+  padding:14px 20px calc(14px + var(--safe-bottom));
+  border-top:1px solid rgba(201,162,39,.2);
+}
+.bd-admin-btn{
+  display:flex;align-items:center;gap:10px;
+  width:100%;padding:13px 16px;
+  background:rgba(201,162,39,.1);
+  border:1px solid rgba(201,162,39,.3);
+  border-radius:12px;
+  color:var(--gold);font-size:14px;font-weight:bold;
+  cursor:pointer;font-family:inherit;transition:.2s;
+}
+.bd-admin-btn:active{background:rgba(201,162,39,.2)}
 
 /* ═══ HERO ═══ */
 .hero{
@@ -575,6 +660,28 @@ footer span{color:var(--gold)}
 </head>
 <body>
 
+<!-- ═══ BURGER OVERLAY + DRAWER ═══ -->
+<div class="burger-overlay" id="burger-overlay" onclick="closeBurger()"></div>
+<div class="burger-drawer" id="burger-drawer">
+  <div class="bd-top">
+    <img class="bd-logo" src="logo.png" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="bd-logo-fallback" style="display:none">🌞</div>
+    <div class="bd-brand">
+      <div class="bd-nome">ilbuonodalsud.it</div>
+      <div class="bd-sub">Dal Sud, al Nord.</div>
+    </div>
+  </div>
+  <div class="bd-nav" id="bd-nav">
+    <div class="bd-section-label">Categorie</div>
+    <!-- popolato da JS -->
+  </div>
+  <div class="bd-bottom">
+    <button class="bd-admin-btn" onclick="closeBurger();openAdminCheck()">
+      <span>⚙</span> Gestione catalogo
+    </button>
+  </div>
+</div>
+
 <!-- ═══ HEADER ═══ -->
 <header>
   <a class="logo-wrap" href="#">
@@ -584,11 +691,14 @@ footer span{color:var(--gold)}
       <div class="logo-sub">Nicola porta al Nord i sapori del Sud</div>
     </div>
   </a>
-  <div style="display:flex;align-items:center;gap:6px">
-    <button class="admin-btn" onclick="openAdminCheck()">⚙</button>
+  <div style="display:flex;align-items:center;gap:4px">
     <!-- bottone carrello desktop -->
     <button class="cart-header-btn" onclick="toggleCart()">
       🛒 Ordine <span id="cart-count-h">0</span>
+    </button>
+    <!-- burger -->
+    <button class="burger-btn" id="burger-btn" onclick="toggleBurger()" aria-label="Menu">
+      <span></span><span></span><span></span>
     </button>
   </div>
 </header>
@@ -800,13 +910,43 @@ const localQty={};
 let editingId=null;
 let activeCat="Tutti";
 
+// ── Burger menu ──
+function toggleBurger(){
+  const btn=document.getElementById("burger-btn");
+  const drawer=document.getElementById("burger-drawer");
+  const overlay=document.getElementById("burger-overlay");
+  btn.classList.toggle("open");
+  drawer.classList.toggle("open");
+  overlay.classList.toggle("open");
+}
+function closeBurger(){
+  document.getElementById("burger-btn").classList.remove("open");
+  document.getElementById("burger-drawer").classList.remove("open");
+  document.getElementById("burger-overlay").classList.remove("open");
+}
+
 // ── Filtri categoria ──
 function renderFilters(){
   const bar=document.getElementById("cat-filters");
+  const nav=document.getElementById("bd-nav");
   const cats=["Tutti",...new Set(prodotti.filter(p=>p.attivo).map(p=>p.cat))];
+
+  // pill bar
   bar.innerHTML=cats.map(c=>
     `<button class="cat-pill${activeCat===c?' active':''}" onclick="filterCat('${c}')">${CAT_ICONS[c]||''} ${c}</button>`
   ).join("");
+
+  // drawer nav
+  nav.innerHTML=`<div class="bd-section-label">Categorie</div>`+
+    cats.map(c=>`
+      <button class="bd-item${activeCat===c?' active':''}" onclick="filterCat('${c}');closeBurger()">
+        <span class="bd-item-icon">${c==='Tutti'?'🏠':(CAT_ICONS[c]||'📦')}</span>
+        ${c}
+      </button>`).join("")+
+    `<div class="bd-divider"></div>
+     <button class="bd-item" onclick="toggleCart();closeBurger()">
+       <span class="bd-item-icon">🛒</span> Il mio ordine
+     </button>`;
 }
 function filterCat(cat){
   activeCat=cat;
